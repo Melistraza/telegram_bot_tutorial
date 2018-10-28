@@ -7,6 +7,8 @@ TOKEN = 'your_token'
 
 bot = telebot.TeleBot(TOKEN)
 
+USER = set()
+
 
 @bot.message_handler(commands=['start'])
 def send_start(message: Message):
@@ -21,7 +23,11 @@ def send_help(message: Message):
 @bot.edited_message_handler(content_types=['text'], func=lambda message: True)
 @bot.message_handler(content_types=['text'], func=lambda message: True)
 def reply_message(message: Message):
-    bot.reply_to(message, 'Bot response: {}'.format(message.text))
+    if message.from_user.id not in USER:
+        bot.send_message(message.chat.id, 'Hi, this is your first message! How are you?')
+        USER.add(message.from_user.id)
+    else:
+        bot.send_message(message.chat.id, 'What has changed since the previous time?')
 
 
 @bot.inline_handler(lambda query: query.query == 'text')
