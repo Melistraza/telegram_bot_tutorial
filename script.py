@@ -3,7 +3,7 @@ import telebot
 from telebot import types
 from telebot.types import Message
 
-TOKEN = 'your_token'
+TOKEN = '723184454:AAFuL24x7eKP86ht425-OPNTl5VArXm0hWA'
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -30,14 +30,18 @@ def reply_message(message: Message):
         bot.send_message(message.chat.id, 'What has changed since the previous time?')
 
 
-@bot.inline_handler(lambda query: query.query == 'text')
-def query_text(inline_query):
-    try:
-        r = types.InlineQueryResultArticle('1', 'Result', types.InputTextMessageContent('Result message.'))
-        r2 = types.InlineQueryResultArticle('2', 'Result2', types.InputTextMessageContent('Result message2.'))
-        bot.answer_inline_query(inline_query.id, [r, r2])
-    except Exception as e:
-        print(e)
+@bot.inline_handler(lambda query: len(query.query) > 0)
+def query_text(query):
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(types.InlineKeyboardButton(text="Like", callback_data="data"))
+    results = []
+    single_msg = types.InlineQueryResultArticle(
+        id="1", title="Press me",
+        input_message_content=types.InputTextMessageContent(message_text="Inline message"),
+        reply_markup=keyboard
+    )
+    results.append(single_msg)
+    bot.answer_inline_query(query.id, results)
 
 
 bot.polling(timeout=60)
