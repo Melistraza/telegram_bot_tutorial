@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import telebot
-from telebot import types
 from telebot.types import Message
 
-TOKEN = 'your_token'
+TOKEN = '723184454:AAFuL24x7eKP86ht425-OPNTl5VArXm0hWA'
 
 bot = telebot.TeleBot(TOKEN)
+
+USER = set()
 
 
 @bot.message_handler(commands=['start'])
@@ -21,17 +22,11 @@ def send_help(message: Message):
 @bot.edited_message_handler(content_types=['text'], func=lambda message: True)
 @bot.message_handler(content_types=['text'], func=lambda message: True)
 def reply_message(message: Message):
-    bot.reply_to(message, 'Bot response: {}'.format(message.text))
-
-
-@bot.inline_handler(lambda query: query.query == 'text')
-def query_text(inline_query):
-    try:
-        r = types.InlineQueryResultArticle('1', 'Result', types.InputTextMessageContent('Result message.'))
-        r2 = types.InlineQueryResultArticle('2', 'Result2', types.InputTextMessageContent('Result message2.'))
-        bot.answer_inline_query(inline_query.id, [r, r2])
-    except Exception as e:
-        print(e)
+    if message.from_user.id not in USER:
+        bot.send_message(message.chat.id, 'Hi, this is your first message! How are you?')
+        USER.add(message.from_user.id)
+    else:
+        bot.send_message(message.chat.id, 'What has changed since the previous time?')
 
 
 bot.polling(timeout=60)
