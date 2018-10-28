@@ -4,8 +4,13 @@ import requests
 
 TOKEN = 'your_token'
 
-API_URL = f'https://api.telegram.org/bot{TOKEN}/getUpdates'
+API_URL = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
 
-request = requests.get(API_URL)
+reply_payload = {
+    'chat_id': 190564045,
+    'text': 'Hola <username>'
+}
+
+request = requests.post(API_URL, data=reply_payload)
 
 print(request.json())
