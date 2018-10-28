@@ -20,7 +20,7 @@ def send_help(message: Message):
 @bot.edited_message_handler(content_types=['text'], func=lambda message: True)
 @bot.message_handler(content_types=['text'], func=lambda message: True)
 def reply_message(message: Message):
-    bot.reply_to(message, 'Bot response: '.format(message.text))
+    bot.reply_to(message, 'Bot response: {}'.format(message.text))
 
 
 bot.polling()
