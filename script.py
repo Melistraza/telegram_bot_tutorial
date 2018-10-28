@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
+import telebot
 
-import requests
+bot = telebot.TeleBot('your_token')
 
-TOKEN = 'your_token'
 
-API_URL = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
+@bot.message_handler(content_types=['text'])
+def reply_message(message):
+    bot.reply_to(message, message.text)
 
-reply_payload = {
-    'chat_id': 190564045,
-    'text': 'Hola <username>'
-}
 
-request = requests.post(API_URL, data=reply_payload)
-
-print(request.json())
+bot.polling()
